@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AguiarCubos</string>
+    <string name="text_acao">Ação</string>
+    <string name="text_drama">Drama</string>
+    <string name="text_fantasia">Fantasia</string>
+    <string name="text_ficcao">Ficção</string>
+</resources>
