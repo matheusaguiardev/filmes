@@ -125,4 +125,10 @@ class HomeActivity : AppCompatActivity() {
             listGeneric.toVisible()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.cancelJobs()
+    }
+
 }
