@@ -15,18 +15,26 @@ class MoviesDataRepository(
 ) : MoviesRepository {
 
     override suspend fun searchMovie(query: String): MovieList {
-        val result = withContext(Dispatchers.IO) {
-            async { searchMovieApi(AUTH_KEY, query) }
-        }.await()
-        return result.toDomain()
+        return try {
+            val result = withContext(Dispatchers.IO) {
+                async { searchMovieApi(AUTH_KEY, query) }
+            }.await()
+            return result.toDomain()
+        } catch (e: Throwable) {
+            MovieList(emptyList(), 0, 0, 0)
+        }
     }
 
     override suspend fun fetchMovies(genreId: List<Int>): MovieList {
+        return try {
+            val result = withContext(Dispatchers.IO) {
+                async { movieApi(AUTH_KEY, genreId) }
+            }.await()
 
-        val result = withContext(Dispatchers.IO) {
-            async { movieApi(AUTH_KEY, genreId) }
-        }.await()
-        return result.toDomain()
+            result.toDomain()
+        } catch (e: Throwable) {
+            MovieList(emptyList(), 0, 0, 0)
+        }
     }
 
     private suspend fun searchMovieApi(
