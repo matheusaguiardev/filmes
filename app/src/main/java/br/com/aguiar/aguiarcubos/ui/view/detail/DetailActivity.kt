@@ -2,6 +2,7 @@ package br.com.aguiar.aguiarcubos.ui.view.detail
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import br.com.aguiar.aguiarcubos.R
@@ -40,6 +41,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setUpLayout(path: String, description: String) {
         textDescription.text = if (!description.isEmpty()) description else "(Sem descrição)"
+        textDescription.movementMethod = ScrollingMovementMethod()
         presenter.loadImage(path)
     }
 
