@@ -2,15 +2,19 @@ package br.com.aguiar.aguiarcubos.repository.movies
 
 import br.com.aguiar.aguiarcubos.domain.repository.movies.MoviesRepository
 import br.com.aguiar.aguiarcubos.mocks.getMovieMock
-import br.com.aguiar.aguiarcubos.repository.mock
-import br.com.aguiar.aguiarcubos.repository.whenever
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.mockito.Mockito.verify
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
+@RunWith(JUnit4::class)
 class MoviesTest {
 
     private val repository = mock<MoviesRepository>()
+
     private val generos = listOf(1, 2)
     private val nomeFilme = "vingadores"
 
