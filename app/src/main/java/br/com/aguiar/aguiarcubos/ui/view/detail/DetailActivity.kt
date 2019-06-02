@@ -3,8 +3,10 @@ package br.com.aguiar.aguiarcubos.ui.view.detail
 import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import br.com.aguiar.aguiarcubos.R
 import kotlinx.android.synthetic.main.activity_detail.*
+import org.koin.android.ext.android.inject
 
 class DetailActivity : AppCompatActivity() {
 
@@ -13,30 +15,32 @@ class DetailActivity : AppCompatActivity() {
         const val DESCRIPTION_KEY_BUNDLE = "DESCRIPTION_KEY"
     }
 
-    var image: Bitmap? = null
+    val presenter: DetailPresenter by inject()
+
     lateinit var description: String
+    lateinit var pathImage: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        /*  image = BitmapFactory.decodeByteArray(
-              intent.getByteArrayExtra(IMAGEM_KEY_BUNDLE),
-              0,
-              intent.getByteArrayExtra(IMAGEM_KEY_BUNDLE).size
-          )
-  */
-        // intent.getParcelableExtra()
+        presenter.imgLoaded().observe(this, Observer(::imageObserver))
 
         description = intent.getStringExtra(DESCRIPTION_KEY_BUNDLE)
-        setUpLayout(image, description)
+        pathImage = intent.getStringExtra(IMAGEM_KEY_BUNDLE)
+
+        setUpLayout(pathImage, description)
     }
 
-    private fun setUpLayout(img: Bitmap?, description: String) {
+    private fun imageObserver(img: Bitmap?) {
         img?.let {
-            imgMovie.setImageBitmap(img)
+            imgMovie.setImageBitmap(it)
         }
-        textDescription.text = description
+    }
+
+    private fun setUpLayout(path: String, description: String) {
+        textDescription.text = if (!description.isEmpty()) description else "(Sem descrição)"
+        presenter.loadImage(path)
     }
 
 }

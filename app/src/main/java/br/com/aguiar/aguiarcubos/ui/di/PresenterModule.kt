@@ -15,5 +15,5 @@ val presenterModule = module {
     single { DramaPresenter(get()) }
     single { FantasiaPresenter(get()) }
     single { FiccaoPresenter(get()) }
-    single { DetailPresenter() }
+    single { DetailPresenter(get()) }
 }

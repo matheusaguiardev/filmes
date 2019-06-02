@@ -23,6 +23,8 @@ class AcaoPresenter(
     fun actionMovie(): LiveData<MovieList> = actionMovie
 
     fun fetchMovies() {
+        if (actionMovie.value != null) return
+
         actionJob = launch {
             val result = interactor(listOf(ACAO_ID))
             actionMovie.value = result

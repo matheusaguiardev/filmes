@@ -12,6 +12,7 @@ import kotlin.coroutines.CoroutineContext
 
 class HomePresenter(
     private val interactor: MoviesInteractor
+
 ) : CoroutineScope {
 
     private var genericMovieJob = Job()

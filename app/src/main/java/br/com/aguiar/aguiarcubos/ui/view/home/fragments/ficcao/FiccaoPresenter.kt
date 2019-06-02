@@ -23,6 +23,7 @@ class FiccaoPresenter(
     fun fictionMovie(): LiveData<MovieList> = fictionMovie
 
     fun fetchMovies() {
+        if (fictionMovie.value != null) return
         fictionJob = launch {
             val result = interactor(listOf(Constants.FICCAO_ID))
             fictionMovie.value = result

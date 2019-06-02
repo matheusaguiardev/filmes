@@ -23,6 +23,7 @@ class DramaPresenter(
     fun dramaMovie(): LiveData<MovieList> = dramaMovie
 
     fun fetchMovies() {
+        if (dramaMovie.value != null) return
         dramaJob = launch {
             val result = interactor(listOf(Constants.DRAMA_ID))
             dramaMovie.value = result

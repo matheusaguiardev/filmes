@@ -1,6 +1,5 @@
 package br.com.aguiar.aguiarcubos.ui.viewholder
 
-import android.graphics.Bitmap
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import br.com.aguiar.aguiarcubos.R
@@ -21,15 +20,13 @@ class MovieViewHolder(
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main
 
-    fun bind(content: MovieDetail, callback: (MovieDetail, Bitmap?) -> Unit) {
-        var img: Bitmap? = null
+    fun bind(content: MovieDetail, callback: (MovieDetail) -> Unit) {
         with(itemView) {
             titleMovieTxt.text = content.title
             launch {
                 content.posterPath?.let {
                     progress.toVisible()
-                    img = imgProvider.fetchImageWithPicasso(it)
-                    logoFilmeImg.setImageBitmap(img)
+                    logoFilmeImg.setImageBitmap(imgProvider.fetchImageWithPicasso(it))
                     progress.toGone()
                 } ?: run {
                     logoFilmeImg.setImageResource(R.mipmap.ic_launcher_round)
@@ -37,6 +34,6 @@ class MovieViewHolder(
                 }
             }
         }
-        itemView.setOnClickListener { callback.invoke(content, img) }
+        itemView.setOnClickListener { callback.invoke(content) }
     }
 }

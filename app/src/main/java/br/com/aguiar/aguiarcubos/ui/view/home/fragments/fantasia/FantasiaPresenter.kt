@@ -23,6 +23,7 @@ class FantasiaPresenter(
     fun fantasyMovie(): LiveData<MovieList> = fantasyMovie
 
     fun fetchMovies() {
+        if (fantasyMovie.value != null) return
         fantasyJob = launch {
             val result = interactor(listOf(Constants.FANTASIA_ID))
             fantasyMovie.value = result

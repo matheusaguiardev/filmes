@@ -3,7 +3,6 @@ package br.com.aguiar.aguiarcubos.ui.view.home
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
@@ -107,11 +106,9 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun callbackClickItem(content: MovieDetail, img: Bitmap?) {
+    private fun callbackClickItem(content: MovieDetail) {
         val intent = Intent(this, DetailActivity::class.java)
-        //val bs = ByteArrayOutputStream()
-        //img?.compress(Bitmap.CompressFormat.PNG, 100, bs)
-        //intent.putExtra(DetailActivity.IMAGEM_KEY_BUNDLE, bs.toByteArray())
+        intent.putExtra(DetailActivity.IMAGEM_KEY_BUNDLE, content.posterPath)
         intent.putExtra(DetailActivity.DESCRIPTION_KEY_BUNDLE, content.overview)
         startActivity(intent)
     }

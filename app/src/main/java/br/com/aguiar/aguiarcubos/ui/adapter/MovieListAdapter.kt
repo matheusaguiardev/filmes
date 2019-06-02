@@ -1,6 +1,5 @@
 package br.com.aguiar.aguiarcubos.ui.adapter
 
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +10,7 @@ import br.com.aguiar.aguiarcubos.ui.viewholder.MovieViewHolder
 
 class MovieListAdapter(
     private val imgProvider: PicassoRepository,
-    private val callback: (MovieDetail, Bitmap?) -> Unit
+    private val callback: (MovieDetail) -> Unit
 ) : RecyclerView.Adapter<MovieViewHolder>() {
 
     private var dataSource: List<MovieDetail> = emptyList()

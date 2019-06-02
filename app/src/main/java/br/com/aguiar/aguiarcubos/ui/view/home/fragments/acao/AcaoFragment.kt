@@ -1,6 +1,5 @@
 package br.com.aguiar.aguiarcubos.ui.view.home.fragments.acao
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,10 +21,10 @@ class AcaoFragment : Fragment() {
     val imgProvider: PicassoRepository by inject()
     val adapter by lazy { MovieListAdapter(imgProvider, callbackClick) }
 
-    lateinit var callbackClick: ((MovieDetail, Bitmap?) -> Unit)
+    lateinit var callbackClick: ((MovieDetail) -> Unit)
 
     companion object {
-        fun newInstance(callback: ((MovieDetail, Bitmap?) -> Unit)): AcaoFragment {
+        fun newInstance(callback: ((MovieDetail) -> Unit)): AcaoFragment {
             val frag = AcaoFragment()
             frag.callbackClick = callback
             return frag
@@ -53,6 +52,11 @@ class AcaoFragment : Fragment() {
             list.layoutManager = GridLayoutManager(requireActivity(), 2)
             list.adapter = adapter
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.cancelJobs()
     }
 
 }
