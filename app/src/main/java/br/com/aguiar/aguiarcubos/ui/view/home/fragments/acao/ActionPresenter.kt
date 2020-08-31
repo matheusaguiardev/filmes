@@ -11,27 +11,37 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class AcaoPresenter(
+class ActionPresenter(
     private val interactor: MoviesInteractor
-) : CoroutineScope {
+) : CoroutineScope, ActionContract.ActionPresenter {
 
     private var actionJob = Job()
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main + actionJob
 
-    private val actionMovie = MutableLiveData<MovieList>()
-    fun actionMovie(): LiveData<MovieList> = actionMovie
+    private val _actionMovie = MutableLiveData<MovieList>()
+    override fun actionMovie(): LiveData<MovieList> = _actionMovie
 
-    fun fetchMovies() {
-        if (actionMovie.value != null) return
+    override var view: ActionContract.ActionView? = null
 
+    override fun attachView(view: ActionContract.ActionView) {
+        this.view = view
+    }
+
+    override fun detachView() {
+        cancelJobs()
+        this.view = null
+    }
+
+    override fun fetchMovies() {
+        if (_actionMovie.value != null) return
         actionJob = launch {
             val result = interactor(listOf(ACAO_ID))
-            actionMovie.value = result
+            _actionMovie.value = result
         }
     }
 
-    fun cancelJobs() {
+    private fun cancelJobs() {
         actionJob.cancel()
     }
 }

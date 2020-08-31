@@ -28,6 +28,7 @@ class HomePresenter(
     }
 
     override fun detachView() {
+        cancelJobs()
         view = null
     }
 
@@ -38,7 +39,7 @@ class HomePresenter(
         }
     }
 
-    override fun cancelJobs() {
+    private fun cancelJobs() {
         genericMovieJob.cancel()
     }
 

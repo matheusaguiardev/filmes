@@ -1,18 +1,25 @@
 package br.com.aguiar.aguiarcubos.ui.di
 
+import br.com.aguiar.aguiarcubos.ui.view.detail.DetailContract
 import br.com.aguiar.aguiarcubos.ui.view.detail.DetailPresenter
+import br.com.aguiar.aguiarcubos.ui.view.home.activity.HomeContract
 import br.com.aguiar.aguiarcubos.ui.view.home.activity.HomePresenter
-import br.com.aguiar.aguiarcubos.ui.view.home.fragments.acao.AcaoPresenter
+import br.com.aguiar.aguiarcubos.ui.view.home.fragments.acao.ActionContract
+import br.com.aguiar.aguiarcubos.ui.view.home.fragments.acao.ActionPresenter
+import br.com.aguiar.aguiarcubos.ui.view.home.fragments.drama.DramaContract
 import br.com.aguiar.aguiarcubos.ui.view.home.fragments.drama.DramaPresenter
-import br.com.aguiar.aguiarcubos.ui.view.home.fragments.fantasia.FantasiaPresenter
-import br.com.aguiar.aguiarcubos.ui.view.home.fragments.ficcao.FiccaoPresenter
+import br.com.aguiar.aguiarcubos.ui.view.home.fragments.fantasia.FantasyContract
+import br.com.aguiar.aguiarcubos.ui.view.home.fragments.fantasia.FantasyPresenter
+import br.com.aguiar.aguiarcubos.ui.view.home.fragments.ficcao.FictionContract
+import br.com.aguiar.aguiarcubos.ui.view.home.fragments.ficcao.FictionPresenter
 import org.koin.dsl.module
 
 
 val presenterModule = module {
-    single { AcaoPresenter(get()) }
-    single { DramaPresenter(get()) }
-    single { FantasiaPresenter(get()) }
-    single { FiccaoPresenter(get()) }
-    single { DetailPresenter(get()) }
+    single { HomePresenter(get()) as HomeContract.HomePresenter }
+    single { ActionPresenter(get()) as ActionContract.ActionPresenter}
+    single { DramaPresenter(get()) as DramaContract.DramaPresenter}
+    single { FantasyPresenter(get()) as FantasyContract.FantasyPresenter}
+    single { FictionPresenter(get()) as FictionContract.FictionPresenter }
+    single { DetailPresenter(get()) as DetailContract.ContractPresenter }
 }

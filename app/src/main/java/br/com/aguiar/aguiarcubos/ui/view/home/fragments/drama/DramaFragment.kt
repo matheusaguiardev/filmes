@@ -15,11 +15,11 @@ import br.com.aguiar.aguiarcubos.ui.adapter.MovieListAdapter
 import kotlinx.android.synthetic.main.fragment_drama.*
 import org.koin.android.ext.android.inject
 
-class DramaFragment : Fragment() {
+class DramaFragment : Fragment(), DramaContract.DramaView {
 
-    val presenter: DramaPresenter by inject()
+    override val presenter: DramaContract.DramaPresenter by inject()
     val imgProvider: PicassoRepository by inject()
-    val adapter by lazy { MovieListAdapter(imgProvider, callbackClick) }
+    private val adapter by lazy { MovieListAdapter(imgProvider, callbackClick) }
 
     lateinit var callbackClick: ((MovieDetail) -> Unit)
 
@@ -38,6 +38,7 @@ class DramaFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        presenter.attachView(this)
         presenter.dramaMovie().observe(viewLifecycleOwner, Observer(::observerMovie))
     }
 
@@ -55,8 +56,8 @@ class DramaFragment : Fragment() {
     }
 
     override fun onDestroy() {
+        presenter.detachView()
         super.onDestroy()
-        presenter.cancelJobs()
     }
 
 }

@@ -12,16 +12,26 @@ import kotlin.coroutines.CoroutineContext
 
 class DetailPresenter(
     private val imgLoader: PicassoRepository
-) : CoroutineScope {
+) : CoroutineScope, DetailContract.ContractPresenter {
 
     private var imgLoadedJob = Job()
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main + imgLoadedJob
 
     private val imgLoaded = MutableLiveData<Bitmap>()
-    fun imgLoaded(): LiveData<Bitmap> = imgLoaded
+    override var view: DetailContract.ContractView? = null
 
-    fun loadImage(path: String) {
+    override fun attachView(view: DetailContract.ContractView) {
+        this.view = view
+    }
+
+    override fun detachView() {
+        this.view = null
+    }
+
+    override fun imgLoaded(): LiveData<Bitmap> = imgLoaded
+
+    override fun loadImage(path: String) {
         launch {
             val img = imgLoader.fetchImageWithPicasso(path)
             imgLoaded.value = img

@@ -11,26 +11,36 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class FantasiaPresenter(
+class FantasyPresenter(
     private val interactor: MoviesInteractor
-) : CoroutineScope {
+) : CoroutineScope, FantasyContract.FantasyPresenter {
 
     private var fantasyJob = Job()
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main + fantasyJob
 
-    private val fantasyMovie = MutableLiveData<MovieList>()
-    fun fantasyMovie(): LiveData<MovieList> = fantasyMovie
+    private val _fantasyMovie = MutableLiveData<MovieList>()
+    override fun fantasyMovie(): LiveData<MovieList> = _fantasyMovie
+    override var view: FantasyContract.FantasyView? = null
 
-    fun fetchMovies() {
-        if (fantasyMovie.value != null) return
+    override fun attachView(view: FantasyContract.FantasyView) {
+        this.view = view
+    }
+
+    override fun detachView() {
+        cancelJobs()
+        view = null
+    }
+
+    override fun fetchMovies() {
+        if (_fantasyMovie.value != null) return
         fantasyJob = launch {
             val result = interactor(listOf(Constants.FANTASIA_ID))
-            fantasyMovie.value = result
+            _fantasyMovie.value = result
         }
     }
 
-    fun cancelJobs() {
+    private fun cancelJobs() {
         fantasyJob.cancel()
     }
 }

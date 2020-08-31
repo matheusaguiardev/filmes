@@ -6,7 +6,7 @@ import br.com.aguiar.aguiarcubos.domain.model.movies.MovieList
 interface HomeContract {
 
     interface HomeView {
-        var presenter: HomePresenter
+        val presenter: HomePresenter
     }
 
     interface HomePresenter {
@@ -15,7 +15,6 @@ interface HomeContract {
         fun detachView()
         fun fetchMovies(url: String)
         fun genericMovie(): LiveData<MovieList>
-        fun cancelJobs()
     }
 
 }
