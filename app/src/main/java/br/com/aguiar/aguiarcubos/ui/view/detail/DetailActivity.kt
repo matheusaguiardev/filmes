@@ -12,14 +12,14 @@ import org.koin.android.ext.android.inject
 class DetailActivity : AppCompatActivity(), DetailContract.ContractView {
 
     companion object {
-        const val IMAGEM_KEY_BUNDLE = "IMAGEM_KEY"
+        const val IMAGE_KEY_BUNDLE = "IMAGE_KEY"
         const val DESCRIPTION_KEY_BUNDLE = "DESCRIPTION_KEY"
     }
 
     override val presenter: DetailContract.ContractPresenter by inject()
 
-    lateinit var description: String
-    lateinit var pathImage: String
+    private lateinit var description: String
+    private lateinit var pathImage: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,7 @@ class DetailActivity : AppCompatActivity(), DetailContract.ContractView {
         presenter.imgLoaded().observe(this, Observer(::imageObserver))
 
         description = intent.getStringExtra(DESCRIPTION_KEY_BUNDLE)
-        pathImage = intent.getStringExtra(IMAGEM_KEY_BUNDLE)
+        pathImage = intent.getStringExtra(IMAGE_KEY_BUNDLE)
 
         setUpLayout(pathImage, description)
     }

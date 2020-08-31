@@ -14,7 +14,6 @@ import br.com.aguiar.aguiarcubos.ui.view.home.fragments.ficcao.FictionContract
 import br.com.aguiar.aguiarcubos.ui.view.home.fragments.ficcao.FictionPresenter
 import org.koin.dsl.module
 
-
 val presenterModule = module {
     single { HomePresenter(get()) as HomeContract.HomePresenter }
     single { ActionPresenter(get()) as ActionContract.ActionPresenter}

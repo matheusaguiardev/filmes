@@ -27,7 +27,6 @@ import br.com.aguiar.aguiarcubos.ui.view.home.fragments.ficcao.FictionFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 
-
 class HomeActivity : AppCompatActivity(), HomeContract.HomeView {
 
     val imgProvider: PicassoRepository by inject()
@@ -107,7 +106,7 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView {
 
     private fun callbackClickItem(content: MovieDetail) {
         val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra(DetailActivity.IMAGEM_KEY_BUNDLE, content.posterPath)
+        intent.putExtra(DetailActivity.IMAGE_KEY_BUNDLE, content.posterPath)
         intent.putExtra(DetailActivity.DESCRIPTION_KEY_BUNDLE, content.overview)
         startActivity(intent)
     }
