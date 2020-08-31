@@ -12,7 +12,7 @@ import br.com.aguiar.aguiarmovies.domain.model.movies.MovieDetail
 import br.com.aguiar.aguiarmovies.domain.model.movies.MovieList
 import br.com.aguiar.aguiarmovies.domain.repository.imagens.PicassoRepository
 import br.com.aguiar.aguiarmovies.ui.adapter.MovieListAdapter
-import kotlinx.android.synthetic.main.fragment_ficcao.*
+import kotlinx.android.synthetic.main.fragment_fiction.*
 import org.koin.android.ext.android.inject
 
 class FictionFragment : Fragment(), FictionContract.FictionView {
@@ -33,11 +33,11 @@ class FictionFragment : Fragment(), FictionContract.FictionView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_ficcao, container, false)
+        return inflater.inflate(R.layout.fragment_fiction, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         presenter.attachView(this)
         presenter.fictionMovie().observe(viewLifecycleOwner, Observer(::observerMovie))
     }
@@ -58,6 +58,22 @@ class FictionFragment : Fragment(), FictionContract.FictionView {
     override fun onDestroy() {
         super.onDestroy()
         presenter.detachView()
+    }
+
+    override fun setProgressVisibility(visibility: Int) {
+        list.visibility = when(visibility) {
+            View.INVISIBLE, View.GONE ->  View.VISIBLE
+            else -> View.GONE
+        }
+        progressBar.visibility = visibility
+    }
+
+    override fun emptyState(visibility: Int) {
+        msgEmptyStateTextView.visibility = visibility
+        list.visibility = when(visibility) {
+            View.INVISIBLE, View.GONE ->  View.VISIBLE
+            else -> View.GONE
+        }
     }
 
 }

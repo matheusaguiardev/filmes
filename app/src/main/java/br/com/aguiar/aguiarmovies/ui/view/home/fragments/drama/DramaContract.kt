@@ -7,6 +7,8 @@ interface DramaContract {
 
     interface DramaView {
         val presenter: DramaPresenter
+        fun setProgressVisibility(visibility: Int)
+        fun emptyState(visibility: Int)
     }
 
     interface DramaPresenter {

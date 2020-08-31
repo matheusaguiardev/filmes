@@ -7,6 +7,8 @@ interface FantasyContract {
 
     interface FantasyView {
         val presenter: FantasyPresenter
+        fun setProgressVisibility(visibility: Int)
+        fun emptyState(visibility: Int)
     }
 
     interface FantasyPresenter {

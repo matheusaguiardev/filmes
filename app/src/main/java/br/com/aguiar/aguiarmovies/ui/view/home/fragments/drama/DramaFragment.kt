@@ -18,6 +18,7 @@ import org.koin.android.ext.android.inject
 class DramaFragment : Fragment(), DramaContract.DramaView {
 
     override val presenter: DramaContract.DramaPresenter by inject()
+
     val imgProvider: PicassoRepository by inject()
     private val adapter by lazy { MovieListAdapter(imgProvider, callbackClick) }
 
@@ -36,8 +37,8 @@ class DramaFragment : Fragment(), DramaContract.DramaView {
         return inflater.inflate(R.layout.fragment_drama, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         presenter.attachView(this)
         presenter.dramaMovie().observe(viewLifecycleOwner, Observer(::observerMovie))
     }
@@ -58,6 +59,22 @@ class DramaFragment : Fragment(), DramaContract.DramaView {
     override fun onDestroy() {
         presenter.detachView()
         super.onDestroy()
+    }
+
+    override fun setProgressVisibility(visibility: Int) {
+        list.visibility = when(visibility) {
+            View.INVISIBLE, View.GONE ->  View.VISIBLE
+            else -> View.GONE
+        }
+        progressBar.visibility = visibility
+    }
+
+    override fun emptyState(visibility: Int) {
+        msgEmptyStateTextView.visibility = visibility
+        list.visibility = when(visibility) {
+            View.INVISIBLE, View.GONE ->  View.VISIBLE
+            else -> View.GONE
+        }
     }
 
 }

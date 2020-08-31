@@ -1,8 +1,10 @@
 package br.com.aguiar.aguiarmovies.ui.view.home.fragments.ficcao
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.aguiar.aguiarmovies.data.utils.Constants
+import br.com.aguiar.aguiarmovies.domain.model.movies.MovieDetail
 import br.com.aguiar.aguiarmovies.domain.model.movies.MovieList
 import br.com.aguiar.aguiarmovies.domain.model.movies.MoviesInteractor
 import kotlinx.coroutines.CoroutineScope
@@ -34,9 +36,16 @@ class FictionPresenter(
 
     override fun fetchMovies() {
         launch {
+            view?.setProgressVisibility(View.VISIBLE)
             val result = interactor(listOf(Constants.FICCAO_ID))
             _fictionMovie.value = result
+            view?.setProgressVisibility(View.INVISIBLE)
+            emptyState(result.result)
         }
+    }
+
+    private fun emptyState(list: List<MovieDetail>) {
+        if(list.isEmpty()) view?.emptyState(View.VISIBLE) else view?.emptyState(View.GONE)
     }
 
     private fun cancelJobs() {

@@ -12,12 +12,13 @@ import br.com.aguiar.aguiarmovies.domain.model.movies.MovieDetail
 import br.com.aguiar.aguiarmovies.domain.model.movies.MovieList
 import br.com.aguiar.aguiarmovies.domain.repository.imagens.PicassoRepository
 import br.com.aguiar.aguiarmovies.ui.adapter.MovieListAdapter
-import kotlinx.android.synthetic.main.fragment_acao.*
+import kotlinx.android.synthetic.main.fragment_action.*
 import org.koin.android.ext.android.inject
 
 class ActionFragment : Fragment(), ActionContract.ActionView {
 
     override val presenter: ActionContract.ActionPresenter by inject()
+
     val imgProvider: PicassoRepository by inject()
     private val adapter by lazy { MovieListAdapter(imgProvider, callbackClick) }
 
@@ -33,11 +34,11 @@ class ActionFragment : Fragment(), ActionContract.ActionView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_acao, container, false)
+        return inflater.inflate(R.layout.fragment_action, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         presenter.attachView(this)
         presenter.actionMovie().observe(viewLifecycleOwner, Observer(::observerMovie))
     }
@@ -58,6 +59,22 @@ class ActionFragment : Fragment(), ActionContract.ActionView {
     override fun onDestroy() {
         presenter.detachView()
         super.onDestroy()
+    }
+
+    override fun setProgressVisibility(visibility: Int) {
+        list.visibility = when(visibility) {
+            View.INVISIBLE, View.GONE ->  View.VISIBLE
+            else -> View.GONE
+        }
+        progressBar.visibility = visibility
+    }
+
+    override fun emptyState(visibility: Int) {
+        msgEmptyStateTextView.visibility = visibility
+        list.visibility = when(visibility) {
+            View.INVISIBLE, View.GONE ->  View.VISIBLE
+            else -> View.GONE
+        }
     }
 
 }
