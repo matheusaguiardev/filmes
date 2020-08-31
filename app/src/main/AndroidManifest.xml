@@ -14,7 +14,7 @@
             android:theme="@style/AppTheme">
         <activity android:name=".ui.view.detail.DetailActivity">
         </activity>
-        <activity android:name=".ui.view.home.HomeActivity">
+        <activity android:name=".ui.view.home.activity.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

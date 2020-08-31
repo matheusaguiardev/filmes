@@ -13,16 +13,27 @@ import kotlin.coroutines.CoroutineContext
 
 class DramaPresenter(
     private val interactor: MoviesInteractor
-) : CoroutineScope {
+) : CoroutineScope, DramaContract.DramaPresenter {
 
     private var dramaJob = Job()
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main + dramaJob
 
     private val dramaMovie = MutableLiveData<MovieList>()
-    fun dramaMovie(): LiveData<MovieList> = dramaMovie
 
-    fun fetchMovies() {
+    override fun dramaMovie(): LiveData<MovieList> = dramaMovie
+    override var view: DramaContract.DramaView? = null
+
+    override fun attachView(view: DramaContract.DramaView) {
+        this.view = view
+    }
+
+    override fun detachView() {
+        cancelJobs()
+        view = null
+    }
+
+    override fun fetchMovies() {
         if (dramaMovie.value != null) return
         dramaJob = launch {
             val result = interactor(listOf(Constants.DRAMA_ID))
@@ -30,7 +41,7 @@ class DramaPresenter(
         }
     }
 
-    fun cancelJobs() {
+    private fun cancelJobs() {
         dramaJob.cancel()
     }
 }

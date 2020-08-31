@@ -15,17 +15,17 @@ import br.com.aguiar.aguiarcubos.ui.adapter.MovieListAdapter
 import kotlinx.android.synthetic.main.fragment_fantasia.*
 import org.koin.android.ext.android.inject
 
-class FantasiaFragment : Fragment() {
+class FantasyFragment : Fragment(), FantasyContract.FantasyView {
 
-    val presenter: FantasiaPresenter by inject()
+    override val presenter: FantasyContract.FantasyPresenter by inject()
     val imgProvider: PicassoRepository by inject()
-    val adapter by lazy { MovieListAdapter(imgProvider, callbackClick) }
+    private val adapter by lazy { MovieListAdapter(imgProvider, callbackClick) }
 
     lateinit var callbackClick: ((MovieDetail) -> Unit)
 
     companion object {
-        fun newInstance(callback: ((MovieDetail) -> Unit)): FantasiaFragment {
-            val frag = FantasiaFragment()
+        fun newInstance(callback: ((MovieDetail) -> Unit)): FantasyFragment {
+            val frag = FantasyFragment()
             frag.callbackClick = callback
             return frag
         }
@@ -38,6 +38,7 @@ class FantasiaFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        presenter.attachView(this)
         presenter.fantasyMovie().observe(viewLifecycleOwner, Observer(::observerMovie))
     }
 
@@ -55,8 +56,8 @@ class FantasiaFragment : Fragment() {
     }
 
     override fun onDestroy() {
+        presenter.detachView()
         super.onDestroy()
-        presenter.cancelJobs()
     }
 
 }

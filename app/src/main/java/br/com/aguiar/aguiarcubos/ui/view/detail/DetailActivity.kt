@@ -9,14 +9,14 @@ import br.com.aguiar.aguiarcubos.R
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.koin.android.ext.android.inject
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity(), DetailContract.ContractView {
 
     companion object {
         const val IMAGEM_KEY_BUNDLE = "IMAGEM_KEY"
         const val DESCRIPTION_KEY_BUNDLE = "DESCRIPTION_KEY"
     }
 
-    val presenter: DetailPresenter by inject()
+    override val presenter: DetailContract.ContractPresenter by inject()
 
     lateinit var description: String
     lateinit var pathImage: String
@@ -40,7 +40,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setUpLayout(path: String, description: String) {
-        textDescription.text = if (!description.isEmpty()) description else "(Sem descrição)"
+        textDescription.text = if (description.isNotEmpty()) description else "(Sem descrição)"
         textDescription.movementMethod = ScrollingMovementMethod()
         presenter.loadImage(path)
     }

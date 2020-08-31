@@ -1,4 +1,4 @@
-package br.com.aguiar.aguiarcubos.ui.view.home.fragments.ficcao
+package br.com.aguiar.aguiarcubos.ui.view.home.fragments.acao
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,20 +12,20 @@ import br.com.aguiar.aguiarcubos.domain.model.movies.MovieDetail
 import br.com.aguiar.aguiarcubos.domain.model.movies.MovieList
 import br.com.aguiar.aguiarcubos.domain.repository.imagens.PicassoRepository
 import br.com.aguiar.aguiarcubos.ui.adapter.MovieListAdapter
-import kotlinx.android.synthetic.main.fragment_ficcao.*
+import kotlinx.android.synthetic.main.fragment_acao.*
 import org.koin.android.ext.android.inject
 
-class FiccaoFragment : Fragment() {
+class ActionFragment : Fragment(), ActionContract.ActionView {
 
-    val presenter: FiccaoPresenter by inject()
+    override val presenter: ActionContract.ActionPresenter by inject()
     val imgProvider: PicassoRepository by inject()
-    val adapter by lazy { MovieListAdapter(imgProvider, callbackClick) }
+    private val adapter by lazy { MovieListAdapter(imgProvider, callbackClick) }
 
     lateinit var callbackClick: ((MovieDetail) -> Unit)
 
     companion object {
-        fun newInstance(callback: ((MovieDetail) -> Unit)): FiccaoFragment {
-            val frag = FiccaoFragment()
+        fun newInstance(callback: ((MovieDetail) -> Unit)): ActionFragment {
+            val frag = ActionFragment()
             frag.callbackClick = callback
             return frag
         }
@@ -33,12 +33,13 @@ class FiccaoFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_ficcao, container, false)
+        return inflater.inflate(R.layout.fragment_acao, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.fictionMovie().observe(viewLifecycleOwner, Observer(::observerMovie))
+        presenter.attachView(this)
+        presenter.actionMovie().observe(viewLifecycleOwner, Observer(::observerMovie))
     }
 
     override fun onStart() {
@@ -55,8 +56,8 @@ class FiccaoFragment : Fragment() {
     }
 
     override fun onDestroy() {
+        presenter.detachView()
         super.onDestroy()
-        presenter.cancelJobs()
     }
 
 }
