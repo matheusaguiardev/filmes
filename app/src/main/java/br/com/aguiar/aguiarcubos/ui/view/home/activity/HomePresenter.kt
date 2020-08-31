@@ -1,4 +1,4 @@
-package br.com.aguiar.aguiarcubos.ui.view.home
+package br.com.aguiar.aguiarcubos.ui.view.home.activity
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,24 +12,33 @@ import kotlin.coroutines.CoroutineContext
 
 class HomePresenter(
     private val interactor: MoviesInteractor
-
-) : CoroutineScope {
+) : CoroutineScope, HomeContract.HomePresenter {
 
     private var genericMovieJob = Job()
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main + genericMovieJob
 
-    private val genericMovie = MutableLiveData<MovieList>()
-    fun genericMovie(): LiveData<MovieList> = genericMovie
+    override var view: HomeContract.HomeView? = null
 
-    fun fetchMovies(name: String) {
+    private val genericMovie = MutableLiveData<MovieList>()
+    override fun genericMovie(): LiveData<MovieList> = genericMovie
+
+    override fun attachView(view: HomeContract.HomeView) {
+       this.view = view
+    }
+
+    override fun detachView() {
+        view = null
+    }
+
+    override fun fetchMovies(url: String) {
         genericMovieJob = launch {
-            val result = interactor.searchMovieByName(name)
+            val result = interactor.searchMovieByName(url)
             genericMovie.value = result
         }
     }
 
-    fun cancelJobs() {
+    override fun cancelJobs() {
         genericMovieJob.cancel()
     }
 

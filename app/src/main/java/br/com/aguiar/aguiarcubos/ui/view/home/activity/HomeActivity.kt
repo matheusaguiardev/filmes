@@ -1,4 +1,4 @@
-package br.com.aguiar.aguiarcubos.ui.view.home
+package br.com.aguiar.aguiarcubos.ui.view.home.activity
 
 import android.app.SearchManager
 import android.content.Context
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import br.com.aguiar.aguiarcubos.R
 import br.com.aguiar.aguiarcubos.domain.model.movies.MovieDetail
 import br.com.aguiar.aguiarcubos.domain.model.movies.MovieList
+import br.com.aguiar.aguiarcubos.domain.model.movies.MoviesInteractor
 import br.com.aguiar.aguiarcubos.domain.repository.imagens.PicassoRepository
 import br.com.aguiar.aguiarcubos.ui.adapter.MovieListAdapter
 import br.com.aguiar.aguiarcubos.ui.adapter.PagerAdapter
@@ -28,13 +29,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), HomeContract.HomeView {
 
-    val presenter: HomePresenter by inject()
     val imgProvider: PicassoRepository by inject()
-    val adapterList by lazy { MovieListAdapter(imgProvider, ::callbackClickItem) }
+    val interactor: MoviesInteractor by inject()
+    private val adapterList by lazy { MovieListAdapter(imgProvider, ::callbackClickItem) }
+    override lateinit var presenter: HomeContract.HomePresenter
 
-    val adapter by lazy {
+    private val adapter by lazy {
         PagerAdapter(
             this,
             supportFragmentManager
@@ -45,18 +47,18 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.elevation = 0f
+        initView()
         setUpPage()
-        presenter.genericMovie().observe(this@HomeActivity, Observer(::observerMovie))
     }
 
     private fun setUpPage() {
-
-        adapter.addFragment(AcaoFragment.newInstance(::callbackClickItem))
-        adapter.addFragment(DramaFragment.newInstance(::callbackClickItem))
-        adapter.addFragment(FantasiaFragment.newInstance(::callbackClickItem))
-        adapter.addFragment(FiccaoFragment.newInstance(::callbackClickItem))
-
-        pager.adapter = adapter
+        with(adapter) {
+            addFragment(AcaoFragment.newInstance(::callbackClickItem))
+            addFragment(DramaFragment.newInstance(::callbackClickItem))
+            addFragment(FantasiaFragment.newInstance(::callbackClickItem))
+            addFragment(FiccaoFragment.newInstance(::callbackClickItem))
+            pager.adapter = this
+        }
         tabs.setupWithViewPager(pager)
     }
 
@@ -128,7 +130,17 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter.cancelJobs()
+        with(presenter) {
+            detachView()
+            cancelJobs()
+        }
+    }
+
+    private fun initView() {
+        presenter = HomePresenter(interactor).apply {
+            attachView(this@HomeActivity)
+            genericMovie().observe(this@HomeActivity, Observer(::observerMovie))
+        }
     }
 
 }
