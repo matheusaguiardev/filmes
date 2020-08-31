@@ -1,10 +1,13 @@
 package br.com.aguiar.aguiarmovies.ui.view.home.fragments.acao
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.aguiar.aguiarmovies.data.utils.Constants.ACAO_ID
+import br.com.aguiar.aguiarmovies.domain.model.movies.MovieDetail
 import br.com.aguiar.aguiarmovies.domain.model.movies.MovieList
 import br.com.aguiar.aguiarmovies.domain.model.movies.MoviesInteractor
+import kotlinx.android.synthetic.main.fragment_action.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -35,9 +38,16 @@ class ActionPresenter(
 
     override fun fetchMovies() {
        launch {
+           view?.setProgressVisibility(View.VISIBLE)
             val result = interactor(listOf(ACAO_ID))
             _actionMovie.value = result
+           view?.setProgressVisibility(View.INVISIBLE)
+           emptyState(result.result)
         }
+    }
+
+    private fun emptyState(list: List<MovieDetail>) {
+        if(list.isEmpty()) view?.emptyState(View.VISIBLE) else view?.emptyState(View.GONE)
     }
 
     private fun cancelJobs() {

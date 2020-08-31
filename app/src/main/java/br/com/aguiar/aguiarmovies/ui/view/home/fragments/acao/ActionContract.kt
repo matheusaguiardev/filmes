@@ -7,6 +7,8 @@ interface ActionContract {
 
     interface ActionView {
         val presenter: ActionPresenter
+        fun setProgressVisibility(visibility: Int)
+        fun emptyState(visibility: Int)
     }
 
     interface ActionPresenter {

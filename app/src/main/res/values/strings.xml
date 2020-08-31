@@ -4,4 +4,5 @@
     <string name="text_drama">Drama</string>
     <string name="text_fantasia">Fantasia</string>
     <string name="text_ficcao">Ficção</string>
+    <string name="txt_no_connection">Nenhum filme foi encontrado, verifique sua conexão.</string>
 </resources>

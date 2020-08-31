@@ -7,6 +7,8 @@ interface FictionContract {
 
     interface FictionView {
         val presenter: FictionPresenter
+        fun setProgressVisibility(visibility: Int)
+        fun emptyState(visibility: Int)
     }
 
     interface FictionPresenter {
